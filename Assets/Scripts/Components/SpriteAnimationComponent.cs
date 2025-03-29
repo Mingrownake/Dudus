@@ -7,6 +7,8 @@ public class SpriteAnimationComponent : MonoBehaviour
 {
     [Header("Animation Settings")]
     [SerializeField] private Sprite[] _sprites;
+
+    [SerializeField] private Sprite[] _spriteFinishing;
     [SerializeField] private float _countAnimationInSeconds;
     [SerializeField] private bool _isLoop;
     
@@ -52,5 +54,17 @@ public class SpriteAnimationComponent : MonoBehaviour
                 OnAnimationFinished?.Invoke();
             }
         }
+    }
+
+    public void SetLoopEnded()
+    {
+        StartEnding();
+    }
+
+    private void StartEnding()
+    {
+        _currentSpriteIndex = 0;
+        _sprites = _spriteFinishing;
+        _isLoop = false;
     }
 }

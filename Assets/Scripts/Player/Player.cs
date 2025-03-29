@@ -1,3 +1,4 @@
+using System;
 using Components;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class Player : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float _speed = 4f;
     [SerializeField] private float _jumpForce = 12f;
+    [SerializeField] private float radiusInteract = 0.5f;
     
     [Header("Components")]
     [SerializeField] private Rigidbody2D _rigidbody2D;
@@ -24,6 +26,7 @@ public class Player : MonoBehaviour
     private bool IsGrounded => _groundChecker.IsGrounded;
 
     private bool CanDoubleJump = true;
+    private LayerMask _interactLayerMask;
     
 
     private void Awake()
@@ -33,6 +36,12 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _healthComponent = GetComponent<HealthComponent>();
+        
+    }
+
+    private void Start()
+    {
+        _interactLayerMask = LayerMask.GetMask("Interactable");
     }
 
     public void SetDirection(Vector2 direction)
@@ -48,6 +57,15 @@ public class Player : MonoBehaviour
             case EffectType.Damage:
                 ApplyDamage();
                 break;
+        }
+    }
+
+    public void ApplyInteract()
+    {
+        var hit = Physics2D.OverlapCircle(transform.position, radiusInteract, _interactLayerMask);
+        if (hit.TryGetComponent<InteractComponent>(out InteractComponent interact))
+        {
+            interact.Interact();
         }
     }
 
@@ -111,4 +129,6 @@ public class Player : MonoBehaviour
             _spriteRenderer.flipX = true;
         }
     }
+    
+    
 }

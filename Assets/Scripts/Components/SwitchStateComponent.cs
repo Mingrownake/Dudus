@@ -1,16 +1,18 @@
+using System;
 using UnityEngine;
 
 public class SwitchStateComponent : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Animator _animator;
+    private readonly int SwitchHash = Animator.StringToHash("Switch");
+
+    private void Awake()
     {
-        
+        _animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SwitchState()
     {
-        
+        _animator.SetTrigger(SwitchHash);
     }
 }

@@ -18,4 +18,12 @@ public class PlayerInputReader : MonoBehaviour
             
         }
     }
+
+    public void OnInteract(InputAction.CallbackContext action)
+    {
+        if (action.canceled)
+        {
+            _player.ApplyInteract();
+        }
+    }
 }
