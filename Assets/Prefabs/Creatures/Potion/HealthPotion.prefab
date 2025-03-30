@@ -215,16 +215,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e5070e07ff44b43a141230283c3f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 3714227102187029162, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  - {fileID: -6202940564662568092, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  - {fileID: -8747976068718324687, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  - {fileID: 7142050841817600938, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  - {fileID: -860807820763296739, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  - {fileID: -5249288142952506341, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  - {fileID: 1089735312403315716, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
-  _countAnimationInSeconds: 2
-  _isLoop: 1
-  OnAnimationFinished:
-    m_PersistentCalls:
-      m_Calls: []
+  _nodes:
+  - _sprites:
+    - {fileID: 3714227102187029162, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: -6202940564662568092, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: -8747976068718324687, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: 7142050841817600938, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: -860807820763296739, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: -5249288142952506341, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: 1089735312403315716, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    _countAnimationInSeconds: 7
+    _isLoop: 1
+    _name: Idle
+    OnAnimationFinished:
+      m_PersistentCalls:
+        m_Calls: []

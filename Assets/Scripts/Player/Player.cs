@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private HealthComponent _healthComponent;
     
+    
     private readonly int IsRunningHash = Animator.StringToHash("IsRunning");
     private readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
     private readonly int VerticalVelocityHash = Animator.StringToHash("VerticalVelocity");
@@ -72,7 +73,7 @@ public class Player : MonoBehaviour
     private void ApplyDamage()
     {
         _animator.SetTrigger(HitHash);
-        _rigidbody2D.linearVelocityY = _jumpForce * 4;
+        _rigidbody2D.AddForceY(_jumpForce * 4, ForceMode2D.Impulse);
     }
 
     private void FixedUpdate()
@@ -85,7 +86,6 @@ public class Player : MonoBehaviour
         {
             CanDoubleJump = true;
         }
-        
     }
 
     private void SetHorizontalVelocity()
@@ -109,6 +109,11 @@ public class Player : MonoBehaviour
         {
             _rigidbody2D.linearVelocity = new Vector2(_rigidbody2D.linearVelocityX, _rigidbody2D.linearVelocityY * 0.5f);
         }
+
+        if (_rigidbody2D.linearVelocityY > _jumpForce)
+        {
+            _rigidbody2D.linearVelocityY = _jumpForce;
+        }
     }
 
     private void SetAnimation()
@@ -122,11 +127,11 @@ public class Player : MonoBehaviour
     {
         if (_direction.x > 0)
         {
-            _spriteRenderer.flipX = false;
+            transform.localScale = new Vector3(1, 1, 1);
         }
         else if (_direction.x < 0)
         {
-            _spriteRenderer.flipX = true;
+            transform.localScale = new Vector3(-1, 1, 1);
         }
     }
     
