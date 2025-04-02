@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private HealthComponent _healthComponent;
+    [SerializeField] private ParticleCreatorComponent _particleCreatorComponent;
     
     
     private readonly int IsRunningHash = Animator.StringToHash("IsRunning");
@@ -25,6 +26,8 @@ public class Player : MonoBehaviour
     private Vector2 _direction;
     private bool PressedJump => _direction.y > 0;
     private bool IsGrounded => _groundChecker.IsGrounded;
+    
+    private bool _overFall = false;
 
     private bool CanDoubleJump = true;
     private LayerMask _interactLayerMask;
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _healthComponent = GetComponent<HealthComponent>();
-        
+        _particleCreatorComponent = GetComponent<ParticleCreatorComponent>();
     }
 
     private void Start()
@@ -76,6 +79,15 @@ public class Player : MonoBehaviour
         _rigidbody2D.AddForceY(_jumpForce * 4, ForceMode2D.Impulse);
     }
 
+    public void ApplyFall()
+    {
+        if (_overFall)
+        {
+            this._particleCreatorComponent.SpawnFallParticles();
+            _overFall = false;
+        }
+    }
+
     private void FixedUpdate()
     {
         SetHorizontalVelocity();
@@ -100,10 +112,11 @@ public class Player : MonoBehaviour
             if (IsGrounded && _rigidbody2D.linearVelocity.y <= 0.01)
             {
                 _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
-            } else if (!IsGrounded && _rigidbody2D.linearVelocity.y <= 0.01 && CanDoubleJump)
+            } else if (!IsGrounded && _rigidbody2D.linearVelocity.y < -1 && CanDoubleJump)
             {
                 _rigidbody2D.linearVelocityY = _jumpForce;
                 CanDoubleJump = false;
+                _overFall = true;
             }
         } else if (_rigidbody2D.linearVelocityY > 0)
         {
@@ -113,6 +126,11 @@ public class Player : MonoBehaviour
         if (_rigidbody2D.linearVelocityY > _jumpForce)
         {
             _rigidbody2D.linearVelocityY = _jumpForce;
+        }
+
+        if (_rigidbody2D.linearVelocityY < -15)
+        {
+            _overFall = true;
         }
     }
 
