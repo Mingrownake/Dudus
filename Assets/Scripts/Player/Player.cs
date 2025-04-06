@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
     public void ApplyInteract()
     {
         var hit = Physics2D.OverlapCircle(transform.position, radiusInteract, _interactLayerMask);
-        if (hit.TryGetComponent<InteractComponent>(out InteractComponent interact))
+        if (hit != null && hit.TryGetComponent<InteractComponent>(out InteractComponent interact))
         {
             interact.Interact();
         }
