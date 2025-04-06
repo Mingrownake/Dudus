@@ -6,6 +6,7 @@ namespace Components
     public enum EffectType
     {
         Health,
-        Damage
+        Damage,
+        None
     }
 }

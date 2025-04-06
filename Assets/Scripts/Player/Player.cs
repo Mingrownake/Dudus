@@ -1,6 +1,7 @@
 using System;
 using Components;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private HealthComponent _healthComponent;
     [SerializeField] private ParticleCreatorComponent _particleCreatorComponent;
+    [SerializeField] private CoinCollector _coinCollector;
     
     
     private readonly int IsRunningHash = Animator.StringToHash("IsRunning");
@@ -26,12 +28,9 @@ public class Player : MonoBehaviour
     private Vector2 _direction;
     private bool PressedJump => _direction.y > 0;
     private bool IsGrounded => _groundChecker.IsGrounded;
-    
     private bool _overFall = false;
-
     private bool CanDoubleJump = true;
     private LayerMask _interactLayerMask;
-    
 
     private void Awake()
     {
@@ -41,6 +40,7 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _healthComponent = GetComponent<HealthComponent>();
         _particleCreatorComponent = GetComponent<ParticleCreatorComponent>();
+        _coinCollector = GetComponent<CoinCollector>();
     }
 
     private void Start()
@@ -64,6 +64,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void PickCoin(int amount)
+    {
+        _coinCollector.CollectCoins(amount);
+    }
+
     public void ApplyInteract()
     {
         var hit = Physics2D.OverlapCircle(transform.position, radiusInteract, _interactLayerMask);
@@ -77,6 +82,27 @@ public class Player : MonoBehaviour
     {
         _animator.SetTrigger(HitHash);
         _rigidbody2D.AddForceY(_jumpForce * 4, ForceMode2D.Impulse);
+        int coins = _coinCollector.Coins;
+        if (coins >= 5)
+        {
+            int removingCoins = 5;
+            SetBurst(removingCoins);
+        }
+        else if (coins > 0)
+        {
+            int removingCoins = Random.Range(1, _coinCollector.Coins);
+            SetBurst(removingCoins);
+        }
+    }
+
+    private void SetBurst(int amount)
+    {
+        _coinCollector.RemoveCoins(amount);
+        ParticleSystem _particleFallCoins = _particleCreatorComponent.SpawnCoinsFallParticles();
+        var burst = _particleFallCoins.emission.GetBurst(0);
+        burst.count = amount;
+        _particleFallCoins.emission.SetBurst(0, burst);
+        _particleFallCoins.Play();
     }
 
     public void ApplyFall()

@@ -13,6 +13,10 @@ public class ParticleCreatorComponent : MonoBehaviour
     [Header("Fall Particles")]
     [SerializeField] private Transform _targetFallPoint;
     [SerializeField] private GameObject particleFall;
+    
+    [Header("Fall Coins")]
+    [SerializeField] private Transform _targetCoinsFallPoint;
+    [SerializeField] private GameObject particleCoinsFall;
 
     public void SpawnRunParticles()
     {
@@ -31,5 +35,12 @@ public class ParticleCreatorComponent : MonoBehaviour
     {
         GameObject particle = Instantiate(particleFall, _targetFallPoint);
         particle.transform.SetParent(null);
+    }
+
+    public ParticleSystem SpawnCoinsFallParticles()
+    {
+        GameObject particle = Instantiate(particleCoinsFall, _targetCoinsFallPoint);
+        particle.transform.SetParent(null);
+        return particle.GetComponent<ParticleSystem>();
     }
 }
