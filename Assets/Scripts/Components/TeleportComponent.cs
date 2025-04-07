@@ -54,5 +54,7 @@ public class TeleportComponent : MonoBehaviour
             player.transform.position = Vector3.Lerp(player.transform.position, target.position, _currentTeleportTime / _teleportTime);
             yield return null;
         }
+
+        _currentTeleportTime = 0;
     }
 }

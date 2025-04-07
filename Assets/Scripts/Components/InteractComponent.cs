@@ -12,7 +12,7 @@ public class InteractComponent : MonoBehaviour
     
     private readonly int _interactTriggerHash = Animator.StringToHash("Interact");
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         _hint.renderer.enabled = true;
     }
@@ -30,6 +30,11 @@ public class InteractComponent : MonoBehaviour
     public void Interact()
     {
         onInteract?.Invoke();
+        _animator.SetTrigger(_interactTriggerHash);
+    }
+
+    public void SetHint()
+    {
         _animator.SetTrigger(_interactTriggerHash);
     }
     
