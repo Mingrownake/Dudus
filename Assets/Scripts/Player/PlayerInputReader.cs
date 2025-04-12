@@ -15,7 +15,7 @@ public class PlayerInputReader : MonoBehaviour
     {
         if (action.canceled)
         {
-            
+            _player.PlayAttackAnimation();
         }
     }
 

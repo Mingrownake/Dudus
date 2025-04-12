@@ -1,5 +1,6 @@
 using System;
 using Components;
+using UnityEditor.Animations;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,8 +10,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 4f;
     [SerializeField] private float _jumpForce = 12f;
     [SerializeField] private float radiusInteract = 0.5f;
+    [SerializeField] private int _damage = 1;
     
-    [Header("Components")]
+    [Header("Components GetComponents")]
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private GroundChecker _groundChecker;
     [SerializeField] private Animator _animator;
@@ -18,18 +20,26 @@ public class Player : MonoBehaviour
     [SerializeField] private HealthComponent _healthComponent;
     [SerializeField] private ParticleCreatorComponent _particleCreatorComponent;
     [SerializeField] private CoinCollector _coinCollector;
+    [SerializeField] private CheckCircleOverlap _checkCircleOverlap;
+    [SerializeField] private ExplosionSpawnComponent _explosionSpawnComponent;
+    
+    [Header("Animations")]
+    [SerializeField] private AnimatorController _unArmedAnimator;
+    [SerializeField] private AnimatorController _armedAnimator;
     
     
     private readonly int IsRunningHash = Animator.StringToHash("IsRunning");
     private readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
     private readonly int VerticalVelocityHash = Animator.StringToHash("VerticalVelocity");
     private readonly int HitHash = Animator.StringToHash("Hit");
+    private readonly int AttackHash = Animator.StringToHash("Attack");
     
     private Vector2 _direction;
     private bool PressedJump => _direction.y > 0;
     private bool IsGrounded => _groundChecker.IsGrounded;
     private bool _overFall = false;
-    private bool CanDoubleJump = true;
+    private bool _canDoubleJump = true;
+    private bool _armed = false;
     private LayerMask _interactLayerMask;
 
     private void Awake()
@@ -41,6 +51,8 @@ public class Player : MonoBehaviour
         _healthComponent = GetComponent<HealthComponent>();
         _particleCreatorComponent = GetComponent<ParticleCreatorComponent>();
         _coinCollector = GetComponent<CoinCollector>();
+        _checkCircleOverlap = GetComponent<CheckCircleOverlap>();
+        _explosionSpawnComponent = GetComponent<ExplosionSpawnComponent>();
     }
 
     private void Start()
@@ -122,7 +134,7 @@ public class Player : MonoBehaviour
         HorizontalOrientation();
         if (IsGrounded)
         {
-            CanDoubleJump = true;
+            _canDoubleJump = true;
         }
     }
 
@@ -138,10 +150,10 @@ public class Player : MonoBehaviour
             if (IsGrounded && _rigidbody2D.linearVelocity.y <= 0.01)
             {
                 _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
-            } else if (!IsGrounded && _rigidbody2D.linearVelocity.y < -1 && CanDoubleJump)
+            } else if (!IsGrounded && _rigidbody2D.linearVelocity.y < -1 && _canDoubleJump)
             {
                 _rigidbody2D.linearVelocityY = _jumpForce;
-                CanDoubleJump = false;
+                _canDoubleJump = false;
                 _overFall = true;
             }
         } else if (_rigidbody2D.linearVelocityY > 0)
@@ -178,6 +190,28 @@ public class Player : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
     }
+
+    public void Armed()
+    {
+        if (!_armed) _armed = true;
+        _animator.runtimeAnimatorController = _armedAnimator;
+    }
     
-    
+
+    public void PlayAttackAnimation()
+    {
+        if (!_armed) return;
+        _animator.SetTrigger(AttackHash);
+    }
+
+    public void Attack()
+    {
+        var colliders = _checkCircleOverlap.CheckCircles();
+        _explosionSpawnComponent.Spawn();
+        if (colliders.Length == 0) return;
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].ApplyEffect(_damage, EffectType.Damage);
+        }
+    }
 }

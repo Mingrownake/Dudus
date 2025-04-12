@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 381050706856000591}
   - component: {fileID: 1781632655502609288}
   - component: {fileID: 2658892851177486946}
-  - component: {fileID: 2820906302214943857}
+  - component: {fileID: 8163982695597172930}
   - component: {fileID: 2205062194317036730}
   - component: {fileID: 8520708783915076852}
   - component: {fileID: 6495557428319322162}
@@ -122,7 +122,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -138,7 +138,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.46717232, y: 0.5000629}
   m_EdgeRadius: 0
---- !u!114 &2820906302214943857
+--- !u!114 &8163982695597172930
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,10 +147,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3940431118608447349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f679abad86c489340be00e3bd9737cfc, type: 3}
+  m_Script: {fileID: 11500000, guid: dde1c99b6ff12274bb8251ab328a63d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onEnter:
+  _collider: {fileID: 0}
+  entered:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2205062194317036730}
@@ -165,10 +166,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8520708783915076852}
-        m_TargetAssemblyTypeName: DestroyObjectComponent, Assembly-CSharp
-        m_MethodName: Destroy
-        m_Mode: 1
+      - m_Target: {fileID: 6495557428319322162}
+        m_TargetAssemblyTypeName: SpriteAnimationComponent, Assembly-CSharp
+        m_MethodName: NextNode
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Destroy
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2658892851177486946}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -230,3 +243,26 @@ MonoBehaviour:
     OnAnimationFinished:
       m_PersistentCalls:
         m_Calls: []
+  - _sprites:
+    - {fileID: 6040734443530017722, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: 8167133005111728920, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: 2014349484240403859, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    - {fileID: 6326803469982491369, guid: f3a7abc8713a7904fb4b1f86f282cf49, type: 3}
+    _countAnimationInSeconds: 2
+    _isLoop: 0
+    _name: Destroy
+    OnAnimationFinished:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8520708783915076852}
+          m_TargetAssemblyTypeName: DestroyObjectComponent, Assembly-CSharp
+          m_MethodName: Destroy
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

@@ -55,10 +55,17 @@ public class SpriteAnimationComponent : MonoBehaviour
         }
     }
 
-    public void NextNode()
+    public void NextNode(String name)
     {
-        _currentNodeIndex = ++_currentNodeIndex;
-        AnimNode nextNode = _nodes[_currentNodeIndex];
+        AnimNode nextNode = null;
+        for (int i = 0; i < _nodes.Length; i++)
+        {
+            if (_nodes[i]._name == name)
+            {
+                nextNode = _nodes[i];
+            }
+        }
+        
         if (nextNode != null)
         {
             _currentNode = nextNode;
