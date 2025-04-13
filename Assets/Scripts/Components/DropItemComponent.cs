@@ -22,9 +22,6 @@ public class DropItemComponent : MonoBehaviour
         for (int i = 0; i < dropItems.Count; i++)
         {
             previousChance += dropItems[i].Chanse;
-            Debug.Log(previousChance);
-            Debug.Log(random);
-            Debug.Log($"{previousChance >= random}");
             if (previousChance >= random)
             {
                 GameObject obj = Instantiate(dropItems[i].Prefab, _target.position, Quaternion.identity);

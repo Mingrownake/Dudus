@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float radiusInteract = 0.5f;
     [SerializeField] private int _damage = 1;
     
-    [Header("Components GetComponents")]
+    [Header("Components")]
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private GroundChecker _groundChecker;
     [SerializeField] private Animator _animator;
@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
     [SerializeField] private CoinCollector _coinCollector;
     [SerializeField] private CheckCircleOverlap _checkCircleOverlap;
     [SerializeField] private ExplosionSpawnComponent _explosionSpawnComponent;
+    
+    [Header("State")]
+    private StateManager _stateManager;
     
     [Header("Animations")]
     [SerializeField] private AnimatorController _unArmedAnimator;
@@ -58,6 +61,10 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _interactLayerMask = LayerMask.GetMask("Interactable");
+        _stateManager = FindAnyObjectByType<StateManager>();
+        HasArm();
+        _coinCollector.InitStateManager(_stateManager);
+        _healthComponent.SetHealth(_stateManager.Data.health);
     }
 
     public void SetDirection(Vector2 direction)
@@ -74,6 +81,12 @@ public class Player : MonoBehaviour
                 ApplyDamage();
                 break;
         }
+    }
+
+    public void HealthEffect(int health)
+    {
+        Debug.Log($"Health: {health}");
+        _stateManager.Data.health = health;
     }
 
     public void PickCoin(int amount)
@@ -193,8 +206,8 @@ public class Player : MonoBehaviour
 
     public void Armed()
     {
-        if (!_armed) _armed = true;
-        _animator.runtimeAnimatorController = _armedAnimator;
+        if (!_armed) _stateManager.Data.SetArmed(true);
+        HasArm();
     }
     
 
@@ -202,6 +215,15 @@ public class Player : MonoBehaviour
     {
         if (!_armed) return;
         _animator.SetTrigger(AttackHash);
+    }
+
+    private void HasArm()
+    {
+        _armed = _stateManager.Data.isArmed;
+        if (_armed)
+        {
+            _animator.runtimeAnimatorController = _armedAnimator; 
+        }
     }
 
     public void Attack()
